@@ -3,13 +3,15 @@ import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchCustomers, fetchInvoiceById } from '@/app/lib/data';
 
 
-export default async function Page({ params }: { params: { id: string } }) {
-    const id = params.id;
+export default async function Page({ params }: { params: { Id: string } }) {
+    const id = params.Id;
     const [invoice, customers] = await Promise.all([
         fetchInvoiceById(id),
         fetchCustomers(),
     ]);
-    console.log(invoice)
+    // console.log('Here')
+    // // console.log(invoice)
+    // console.log('End here')
     return (
         <main>
             <Breadcrumbs
