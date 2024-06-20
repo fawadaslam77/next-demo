@@ -18,6 +18,7 @@ async function getUser(email: string): Promise<User | undefined> {
 }
 
 export const authConfig: NextAuthConfig = {
+    secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: '/login',
     },
@@ -33,6 +34,14 @@ export const authConfig: NextAuthConfig = {
             }
             return true;
         },
+        async signIn({ account }) {
+            console.log('first here')
+            if (account?.provider === 'credentials' && account?.providerAccountId) {
+                return true;
+            } else {
+                return false
+            }
+        }
     },
     providers: [
         Credentials({
@@ -41,9 +50,11 @@ export const authConfig: NextAuthConfig = {
                     .object({ email: z.string().email(), password: z.string().min(6) })
                     .safeParse(credentials);
 
+                console.log('Here')
                 if (parsedCredentials.success) {
                     const { email, password } = parsedCredentials.data
                     const user = await getUser(email);
+                    console.log(user)
                     if (!user) return null;
                     const passwordsMatch = await bcrypt.compare(password, user.password);
 
