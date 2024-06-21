@@ -12,6 +12,7 @@ async function main() {
   await seedInvoices(client);
   await seedRevenue(client);
   await client.end();
+  return 'success'
 }
 
 main().catch((err) => {
@@ -20,3 +21,7 @@ main().catch((err) => {
     err,
   );
 });
+
+module.exports = {
+  main
+}
