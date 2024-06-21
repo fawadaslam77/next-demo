@@ -14,20 +14,23 @@ async function seedInvoices(client) {
             date DATE NOT NULL
         );`, []);
 
+
         console.log(`Created "invoices" table`);
 
         // Truncate table
         await client.query(`TRUNCATE TABLE invoices`, []);
-        // Insert data into the "invoices" table
-        const insertedInvoices = await Promise.all(
-            invoices.map(
-                (invoice) => client.query(`
-        INSERT INTO invoices (customer_id, amount, status, date)
-        VALUES ('${invoice.customer_id}', '${invoice.amount}', '${invoice.status}', '${invoice.date}')
-        ON CONFLICT (id) DO NOTHING;`, []))
-        );
 
-        console.log(`Seeded ${insertedInvoices.length} invoices`);
+        var insertQuery = 'INSERT INTO invoices (customer_id, amount, status, date) VALUES ';
+        invoices.map((ele, index) => {
+            insertQuery += `('${ele.customer_id}', '${ele.amount}', '${ele.status}', '${ele.date}')`
+            if (index !== invoices.length - 1) {
+                insertQuery += ', '
+            }
+        })
+        insertQuery += ' ON CONFLICT (id) DO NOTHING;'
+
+        const insertedInvoices = await client.query(insertQuery, [])
+        console.log(`Seeded ${insertedInvoices.rowCount} invoices`);
 
         return {
             createTable,

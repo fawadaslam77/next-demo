@@ -3,13 +3,15 @@ const { seedUsers } = require('./seedUsers');
 const { seedInvoices } = require('./seedInvoices');
 const { seedCustomers } = require('./seedCustomers');
 const { seedRevenue } = require('./seedRevenue');
+const { sql } = require('@vercel/postgres');
 
 async function main() {
-  const client = await DbConnect();
+  // console.log(first)
+  const client = sql
 
-  await seedUsers(client);
-  await seedCustomers(client);
-  await seedInvoices(client);
+  // await seedUsers(client);
+  // await seedCustomers(client);
+  // await seedInvoices(client);
   await seedRevenue(client);
   await client.end();
   return 'success'
@@ -22,6 +24,3 @@ main().catch((err) => {
   );
 });
 
-module.exports = {
-  main
-}

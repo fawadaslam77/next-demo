@@ -14,15 +14,17 @@ async function seedRevenue(client) {
         // Truncate table
         await client.query(`TRUNCATE TABLE revenue`, []);
         // Insert data into the "revenue" table
-        const insertedRevenue = await Promise.all(
-            revenue.map(
-                (rev) => client.query(`
-        INSERT INTO revenue (month, revenue)
-        VALUES ('${rev.month}', '${rev.revenue}')
-        ON CONFLICT (month) DO NOTHING;`, []))
-        );
+        var insertQuery = 'INSERT INTO revenue (month, revenue) VALUES ';
+        revenue.map((ele, index) => {
+            insertQuery += `('${ele.month}', '${ele.revenue}')`
+            if (index !== revenue.length - 1) {
+                insertQuery += ', '
+            }
+        })
 
-        console.log(`Seeded ${insertedRevenue.length} revenue`);
+        const insertedRevenue = await client.query(insertQuery, [])
+
+        console.log(`Seeded ${insertedRevenue.rowCount} revenue`);
 
         return {
             createTable,

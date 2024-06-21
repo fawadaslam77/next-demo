@@ -18,15 +18,16 @@ async function seedCustomers(client) {
         // Truncate table
         await client.query(`TRUNCATE TABLE customers`, []);
         // Insert data into the "customers" table
-        const insertedCustomers = await Promise.all(
-            customers.map(
-                (customer) => client.query(`
-        INSERT INTO customers (id, name, email, image_url)
-        VALUES ('${customer.id}', '${customer.name}', '${customer.email}', '${customer.image_url}')
-        ON CONFLICT (id) DO NOTHING;`, []))
-        );
-
-        console.log(`Seeded ${insertedCustomers.length} customers`);
+        var insertQuery = 'INSERT INTO customers (id, name, email, image_url) VALUES ';
+        customers.map((ele, index) => {
+            insertQuery += `('${ele.id}', '${ele.name}', '${ele.email}', '${ele.image_url}')`
+            if (index !== customers.length - 1) {
+                insertQuery += ', '
+            }
+        })
+        insertQuery += ' ON CONFLICT (id) DO NOTHING;'
+        const insertedCustomers = await client.query(insertQuery, [])
+        console.log(`Seeded ${insertedCustomers.rowCount} customers`);
 
         return {
             createTable,
