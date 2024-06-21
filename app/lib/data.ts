@@ -9,6 +9,7 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+import queryDatabase from './queryHelper';
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -235,6 +236,21 @@ export async function getUser(email: string) {
   try {
     const user = await sql`SELECT * FROM users WHERE email=${email}`;
     return user.rows[0] as User;
+  } catch (error) {
+    console.error('Failed to fetch user:', error);
+    throw new Error('Failed to fetch user.');
+  }
+}
+
+export async function createUser(params: any) {
+
+}
+
+export async function getUserByEmail(email: string): Promise<User | null> {
+  try {
+    const user = await queryDatabase(`SELECT * FROM users WHERE email='${email}'`, []);
+    // console.log(user)
+    return user.rows[0];
   } catch (error) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');

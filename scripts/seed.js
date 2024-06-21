@@ -11,7 +11,6 @@ async function main() {
   await seedCustomers(client);
   await seedInvoices(client);
   await seedRevenue(client);
-
   await client.end();
 }
 

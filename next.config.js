@@ -6,7 +6,7 @@ const nextConfig = {
         return config;
     },
     experimental: {
-        serverComponentsExternalPackages: ['bcrypt']
+        serverComponentsExternalPackages: ['bcrypt','pg']
     }
 };
 
