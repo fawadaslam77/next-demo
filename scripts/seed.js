@@ -6,12 +6,11 @@ const { seedRevenue } = require('./seedRevenue');
 const { sql } = require('@vercel/postgres');
 
 async function main() {
-  // console.log(first)
   const client = sql
 
-  // await seedUsers(client);
-  // await seedCustomers(client);
-  // await seedInvoices(client);
+  await seedUsers(client);
+  await seedCustomers(client);
+  await seedInvoices(client);
   await seedRevenue(client);
   await client.end();
   return 'success'

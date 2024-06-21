@@ -40,12 +40,14 @@ export default function LoginForm() {
     console.log(process.env.NEXTAUTH_SECRET)
     try {
       const { email, password, } = formData
+      setPending(true)
       const response: any = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
       console.log(response)
+      setPending(false)
       if (response?.error && response?.error === "CredentialsSignin") {
         setLoginError('Invalid credentials')
       } else if (response?.error) {
@@ -56,6 +58,7 @@ export default function LoginForm() {
         router.refresh();
       }
     } catch (error: any) {
+      setPending(false)
       console.log(error)
       setLoginError(error.response.statusText)
     }
@@ -125,9 +128,6 @@ export default function LoginForm() {
         <Button className="mt-4 w-full" disabled={pending ? true : false}>
           Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
-
-        <br></br>
-        <Button type='button' onClick={testApi}>Test</Button>
         <div className="flex h-8 items-end space-x-1">
           {/* Add form errors here */}
           <div
@@ -148,12 +148,3 @@ export default function LoginForm() {
 
   );
 }
-
-// function LoginButton() {
-//   const { pending } = useFormStatus()
-//   return (
-//     <Button className="mt-4 w-full" disabled={pending ? true : false}>
-//       Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-//     </Button>
-//   );
-// }
