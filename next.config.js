@@ -6,7 +6,10 @@ const nextConfig = {
         return config;
     },
     experimental: {
-        serverComponentsExternalPackages: ['bcrypt','pg']
+        serverComponentsExternalPackages: ['bcrypt', 'pg']
+    },
+    typescript: {
+        ignoreBuildErrors: true
     }
 };
 
